@@ -1,0 +1,943 @@
+DROP DATABASE IF EXISTS proyecto;
+CREATE DATABASE proyecto CHARACTER SET utf8mb4;
+USE proyecto;
+
+
+
+-- proyecto.estadio definition
+
+CREATE TABLE `estadio` (
+  `nombre` varchar(100) NOT NULL,
+  `lugar` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- proyecto.marcas definition
+
+CREATE TABLE `marcas` (
+  `Nombre_marca` varchar(45) NOT NULL,
+  `Patinadores_patrocinados` int DEFAULT NULL,
+  PRIMARY KEY (`Nombre_marca`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- proyecto.patinadores definition
+
+CREATE TABLE `patinadores` (
+  `codigo_patinadores` int NOT NULL,
+  `Nombre` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `Fecha_nac` date DEFAULT NULL,
+  `Pais` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`codigo_patinadores`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- proyecto.patinadores_has_marcas definition
+
+CREATE TABLE `patinadores_has_marcas` (
+  `codigo_patinadores` int NOT NULL,
+  `Nombre_marca` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  KEY `fk_PATINADORES_has_MARCAS_MARCAS1_idx` (`Nombre_marca`),
+  KEY `fk_PATINADORES_has_MARCAS_PATINADORES1_idx` (`codigo_patinadores`),
+  CONSTRAINT `patinadores_has_marcas_ibfk_1` FOREIGN KEY (`Nombre_marca`) REFERENCES `marcas` (`Nombre_marca`),
+  CONSTRAINT `patinadores_has_marcas_ibfk_2` FOREIGN KEY (`codigo_patinadores`) REFERENCES `patinadores` (`codigo_patinadores`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- proyecto.torneo definition
+
+CREATE TABLE `torneo` (
+  `codigo_torneo` int NOT NULL,
+  `nombre` varchar(45) DEFAULT NULL,
+  `fecha` date DEFAULT NULL,
+  PRIMARY KEY (`codigo_torneo`),
+  KEY `torneo_FK` (`nombre`),
+  CONSTRAINT `torneo_FK` FOREIGN KEY (`nombre`) REFERENCES `estadio` (`nombre`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- proyecto.participantes definition
+
+CREATE TABLE `participantes` (
+  `codigo_patinadores` int NOT NULL,
+  `TORNEO_codigo_torneo` int DEFAULT NULL,
+  `penalizaciones` int DEFAULT NULL,
+  `num_puntos` int DEFAULT NULL,
+  `mejor_truco` int DEFAULT NULL,
+  KEY `fk_PATINADORES_has_TORNEO1_TORNEO1_idx` (`TORNEO_codigo_torneo`),
+  KEY `fk_PATINADORES_has_TORNEO1_PATINADORES1_idx` (`codigo_patinadores`),
+  CONSTRAINT `fk_PATINADORES_has_TORNEO1_PATINADORES1` FOREIGN KEY (`codigo_patinadores`) REFERENCES `patinadores` (`codigo_patinadores`),
+  CONSTRAINT `fk_PATINADORES_has_TORNEO1_TORNEO1` FOREIGN KEY (`TORNEO_codigo_torneo`) REFERENCES `torneo` (`codigo_torneo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+----------------------------------------------INSERTS--------------------------------------------
+
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (670,'Auguste Fenich','1999-03-16','Philippines'),
+	 (859,'Noelani Kryszka','1999-12-18','France'),
+	 (996,'Bil Szantho','1997-12-03','Russia'),
+	 (1217,'Kimbell Claypool','2001-07-12','Uganda'),
+	 (1234,'Paco','2021-01-18','España'),
+	 (1937,'Patty Gapper','1998-01-03','Bulgaria'),
+	 (3359,'Nealson Stoggles','1996-10-28','France'),
+	 (4472,'Wood Couroy','1991-11-24','Brazil'),
+	 (4898,'Loralyn Straw','1998-04-09','Japan'),
+	 (5678,'Manel','2002-10-05','Francia');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (7123,'Nealon Meacher','1995-03-27','China'),
+	 (10118,'Pamelina Emes','1995-01-20','Azerbaijan'),
+	 (12876,'Charla Entissle','2001-02-03','China'),
+	 (12877,'Cosette Gravett','2000-12-07','Lithuania'),
+	 (13362,'Odetta Tamlett','1996-06-28','Russia'),
+	 (14192,'Regan Reinhart','1999-02-06','Afghanistan'),
+	 (14829,'Ingrim Ebden','1997-04-14','Indonesia'),
+	 (15231,'Christin Barsham','1994-12-12','Slovenia'),
+	 (16111,'Fredek Cavolini','1991-10-21','Indonesia'),
+	 (17639,'Franky Ilden','1998-08-31','Burundi');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (20882,'Dominick Lavelle','1997-06-01','Ukraine'),
+	 (23342,'Drake Walthew','1997-03-11','Palau'),
+	 (23628,'Stephie Strand','2001-07-05','Italy'),
+	 (24295,'Janey Wethers','1995-06-22','Portugal'),
+	 (24319,'Rip Crewe','1997-03-14','Venezuela'),
+	 (24550,'Rhiamon Canet','1997-11-19','Canada'),
+	 (24893,'Marnie Fall','2001-02-10','Syria'),
+	 (26075,'Catharine Upcott','1994-04-15','Thailand'),
+	 (26235,'Tani Klugel','2000-02-17','Russia'),
+	 (26885,'Yasmeen Seth','1993-03-24','Nigeria');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (27136,'Kalinda Carter','1991-09-29','Brazil'),
+	 (28429,'Jarid Moneti','1993-12-09','China'),
+	 (30028,'Dwight McNickle','2000-07-10','China'),
+	 (30194,'Rosalinde Scorer','1991-09-28','South Korea'),
+	 (30347,'Spense Schubuser','1994-09-02','Russia'),
+	 (30580,'Kimmy Prophet','1998-01-31','Peru'),
+	 (30593,'Shannen Bortoletti','1997-09-18','Iran'),
+	 (30974,'Clerkclaude Wingham','1998-06-06','New Zealand'),
+	 (31889,'Alyss Grundon','1998-06-05','Philippines'),
+	 (33071,'Fionnula Blazewicz','1991-10-02','Papua New Guinea');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (33640,'Fin Mathiot','1997-01-08','Cuba'),
+	 (33977,'Bendite Camilletti','1999-07-24','Canada'),
+	 (34252,'Kellina Worcs','1999-08-29','China'),
+	 (34963,'Sam Dumpleton','1993-11-07','China'),
+	 (35951,'Marysa Stetson','1995-02-16','China'),
+	 (36011,'Kailey Braizier','1994-05-11','Indonesia'),
+	 (36056,'Holden Goldsbrough','1995-04-04','Colombia'),
+	 (36142,'Tarrah Langfat','1991-07-19','China'),
+	 (36201,'Jamie Boutellier','1997-01-30','Sweden'),
+	 (36355,'Clementia Hedlestone','2001-03-09','United States');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (36558,'Rubie Dartnell','2001-11-09','Indonesia'),
+	 (37321,'Yulma Gaize','1998-04-20','China'),
+	 (37352,'Wallache Drowsfield','1998-09-02','Indonesia'),
+	 (37423,'Lowell Hillborne','1995-04-24','Indonesia'),
+	 (39336,'Alyda Vreede','1995-10-22','Kosovo'),
+	 (40108,'Stearn Disbrow','1994-04-04','Lebanon'),
+	 (42605,'Zora Freiberg','1998-05-23','Malaysia'),
+	 (42668,'Jacklyn Daingerfield','2000-05-15','France'),
+	 (43011,'Berthe McAdam','1997-07-10','China'),
+	 (43625,'Sharl Featherstonhaugh','1993-10-15','China');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (44211,'Jaye Macken','1998-05-23','China'),
+	 (44568,'Abelard Pettigrew','1998-12-26','Russia'),
+	 (44723,'Katrine Brash','1998-07-12','Finland'),
+	 (45026,'Tanya Chantree','1992-04-29','United States'),
+	 (45588,'Ursala Lambrick','2001-01-03','Mayotte'),
+	 (46067,'Joly Robbings','1996-03-16','Philippines'),
+	 (46344,'Renata Robberecht','2000-02-15','Japan'),
+	 (46837,'Lonny Pershouse','1992-08-29','Morocco'),
+	 (46906,'Olin McNulty','1990-08-31','Mexico'),
+	 (47096,'Andriana Sperski','1997-02-13','Indonesia');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (47231,'Filberto Creeboe','2001-08-07','Luxembourg'),
+	 (47541,'Dare Charity','1997-03-04','Philippines'),
+	 (47547,'Lilllie Antonsson','1994-11-15','France'),
+	 (49031,'Willette Grayley','1998-09-28','Argentina'),
+	 (49203,'Pier Pessler','1997-11-06','France'),
+	 (49829,'Austina Brown','1990-09-27','China'),
+	 (49925,'Kenon Peirce','1999-04-14','China'),
+	 (52422,'Colby Oldis','2000-04-08','Philippines'),
+	 (52585,'Jerry Matus','2001-12-20','China'),
+	 (53083,'Dahlia Romaynes','1991-01-13','Serbia');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (53327,'Markus Spacie','1991-01-01','China'),
+	 (53338,'Damiano Velasquez','1998-04-07','Portugal'),
+	 (53722,'Carey Zecchi','1990-09-23','Indonesia'),
+	 (53820,'Lowell Spadelli','1992-09-25','Bulgaria'),
+	 (53863,'Edwina Elix','1998-09-09','China'),
+	 (53910,'Clem Macken','2001-02-27','United States'),
+	 (55164,'Stewart Daly','1991-12-04','Albania'),
+	 (57268,'Linell Cino','2001-05-07','Japan'),
+	 (57537,'Chantal Brockett','1996-02-22','China'),
+	 (58496,'Ranique Taylour','1995-02-23','Indonesia');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (59312,'Quintus Bettanay','1998-11-16','Mexico'),
+	 (62036,'Ignacio Jizhaki','1996-12-03','Russia'),
+	 (62507,'Beckie Stovin','1997-05-22','China'),
+	 (62543,'Orion Cottrill','1993-11-24','Finland'),
+	 (62822,'Jackqueline Martyn','1993-09-08','Iraq'),
+	 (63072,'Mersey Pennigar','1991-03-17','Ethiopia'),
+	 (63139,'Olivero Hansford','1995-05-06','Poland'),
+	 (63737,'Adrienne Adame','1992-08-31','Dominican Republic'),
+	 (64314,'Flinn Redmore','1992-05-19','China'),
+	 (64353,'Becki Rawsthorne','1992-12-15','Poland');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (64595,'Mabelle Hellwig','1994-03-20','Malaysia'),
+	 (68382,'Whitman Andersch','1990-03-01','Bangladesh'),
+	 (69013,'Chev Desson','1997-09-27','Czech Republic'),
+	 (69754,'Cammy Koop','1993-08-07','Portugal'),
+	 (70344,'Ianthe Ollerearnshaw','1991-08-16','Philippines'),
+	 (71530,'Cody Storry','1993-01-22','China'),
+	 (71654,'Eryn Sola','2000-12-11','China'),
+	 (71789,'Tobe Caban','2001-01-09','Germany'),
+	 (73251,'Gustave Covey','1997-06-04','China'),
+	 (73407,'Kim Cinavas','1993-05-31','Mexico');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (73451,'Roscoe Laxtonne','2001-02-14','Sweden'),
+	 (73691,'Annaliese Lampett','2001-11-22','China'),
+	 (73914,'Eduino Dowman','1998-09-07','Tanzania'),
+	 (75208,'Mellicent Tale','2001-05-31','Hong Kong'),
+	 (75368,'Zedekiah Targetter','2000-03-28','United States'),
+	 (75703,'Hubey Gouldthorpe','2000-07-11','Kosovo'),
+	 (76086,'Floria Brownhill','1994-05-28','Brazil'),
+	 (76343,'Clarence Storrs','1995-03-21','Indonesia'),
+	 (76571,'Erasmus Meffin','1994-10-20','China'),
+	 (79274,'Bucky Harriot','1990-04-11','Philippines');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (80701,'Tori Anthill','1996-03-05','China'),
+	 (81012,'Tammara Bodham','1992-11-07','Bangladesh'),
+	 (81222,'Nellie Chawkley','1997-03-22','China'),
+	 (81429,'Tommy Twinning','1993-06-28','Botswana'),
+	 (81556,'Nilson Armin','1994-05-11','Philippines'),
+	 (83632,'Bunny Iacomo','1992-05-16','Mexico'),
+	 (83968,'Clerc Pochet','1998-05-27','Czech Republic'),
+	 (84412,'Joshuah Hairyes','1991-04-21','Sweden'),
+	 (85709,'Gweneth Pearcey','1996-03-24','Indonesia'),
+	 (86080,'Stephenie Leall','1996-02-11','Poland');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (86781,'Dolli Cahalin','1992-02-02','Indonesia'),
+	 (87826,'Lorrie Santoro','1992-10-11','China'),
+	 (88803,'Ari Oldman','2000-02-20','France'),
+	 (89261,'Ewen Bolzmann','1998-06-07','China'),
+	 (89977,'Rodd Bruffell','1991-11-03','Ethiopia'),
+	 (90538,'Phoebe Michin','1993-08-16','Iran'),
+	 (90998,'Rafferty Speke','1996-06-18','China'),
+	 (91212,'Patin Klaggeman','1997-01-01','Uganda'),
+	 (92429,'Stacia Balsillie','1993-07-27','Canada'),
+	 (93096,'Consuelo Denisovo','1999-07-04','Philippines');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (93731,'Julie Avraam','1992-08-07','Portugal'),
+	 (96340,'Saxon Guyan','1996-05-27','China'),
+	 (96419,'Joelly Pencot','1991-06-23','Indonesia'),
+	 (96700,'Romona Dalton','1997-06-21','Canada'),
+	 (96813,'Brendon Paradine','1997-01-05','China'),
+	 (97083,'Clarey Gwyther','1996-05-10','Japan'),
+	 (97604,'Sammy Loughney','2001-07-23','Portugal'),
+	 (97879,'Claudell Cunde','1999-10-30','Indonesia'),
+	 (98283,'Siouxie Corlett','1992-08-06','Philippines'),
+	 (98390,'Nadya Rickford','1995-09-26','Ghana');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100000,'Sharon Mcbride','1993-08-16','Malta'),
+	 (100001,'Blossom Patterson','1993-06-11','Costa Rica'),
+	 (100002,'Phillip Albert','1998-10-29','Burkina Faso'),
+	 (100003,'Ebony Mcmillan','1997-03-10','Serbia'),
+	 (100004,'Chandler Reese','1993-03-09','Laos'),
+	 (100005,'Jemima Chen','2000-04-14','Saint Lucia'),
+	 (100006,'Rudyard Simpson','1997-01-12','Cocos (Keeling) Islands'),
+	 (100007,'Holmes Weiss','1996-10-31','Norway'),
+	 (100008,'Mara Tillman','1999-12-28','Comoros'),
+	 (100009,'Zenaida Alexander','1993-05-18','Canada');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100010,'Jane Figueroa','1996-09-04','Albania'),
+	 (100011,'Harlan Mckinney','1994-01-09','Uzbekistan'),
+	 (100012,'Wang Eaton','1993-08-21','Uruguay'),
+	 (100013,'Kennan Ramsey','1995-09-20','Greenland'),
+	 (100014,'Melvin David','1995-07-13','Yemen'),
+	 (100015,'Judah Horne','1992-05-13','France'),
+	 (100016,'Warren Christian','1999-07-22','Hong Kong'),
+	 (100017,'Lunea Whitehead','1995-03-15','Poland'),
+	 (100018,'Pearl Arnold','1993-11-23','American Samoa'),
+	 (100019,'Nola Byrd','1993-12-09','Tajikistan');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100020,'Gage Odonnell','2000-05-05','Ecuador'),
+	 (100021,'Taylor Brock','1995-06-14','Mauritius'),
+	 (100022,'Nell Howe','1995-08-22','Mongolia'),
+	 (100023,'Jenna Frederick','1996-06-17','Malta'),
+	 (100024,'Eliana Boyd','1996-06-27','Korea, South'),
+	 (100025,'Kylan Prince','1992-08-28','Palau'),
+	 (100026,'Ulla Phillips','1996-09-23','Macao'),
+	 (100027,'Shaine Wiley','1996-11-23','Canada'),
+	 (100028,'Elaine Nichols','1998-12-08','Spain'),
+	 (100029,'Dakota Armstrong','1993-04-18','Nauru');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100030,'Angelica Torres','2000-02-03','Syria'),
+	 (100031,'Knox Mclean','1993-08-12','South Sudan'),
+	 (100032,'Quynn Mcdaniel','1994-08-21','Australia'),
+	 (100033,'Francis Tate','1999-10-16','South Africa'),
+	 (100034,'Grant Wells','1994-07-15','Barbados'),
+	 (100035,'Amery Robles','1994-09-17','India'),
+	 (100036,'Forrest Briggs','1995-12-19','Aruba'),
+	 (100037,'Dolan Shaffer','1993-08-09','Bermuda'),
+	 (100038,'Lenore Middleton','1993-01-02','Virgin Islands, United States'),
+	 (100039,'Sandra Huffman','1996-09-21','Cook Islands');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100040,'Kirsten Whitney','1996-12-10','Angola'),
+	 (100041,'Nathaniel Stuart','1999-01-11','Chad'),
+	 (100042,'Anne Farley','1998-07-08','Ireland'),
+	 (100043,'Scarlett Moreno','2000-08-07','Northern Mariana Islands'),
+	 (100044,'Wade Galloway','1993-08-05','Pitcairn Islands'),
+	 (100045,'Wang Maldonado','1999-04-04','United Arab Emirates'),
+	 (100046,'Burke Bell','1993-05-19','Saudi Arabia'),
+	 (100047,'Yuri Shaw','1997-01-06','Portugal'),
+	 (100048,'Jasmine Hopper','2000-08-26','Uruguay'),
+	 (100049,'Barrett Roach','1996-02-09','Reunion');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100050,'Tate Hayden','1998-05-16','Tonga'),
+	 (100051,'Serina Patterson','1994-12-08','American Samoa'),
+	 (100052,'Ashton Walker','2000-12-26','Timor-Leste'),
+	 (100053,'Gisela Santos','1995-01-27','Guam'),
+	 (100054,'Carlos Boone','1998-05-12','Dominican Republic'),
+	 (100055,'Quon Ballard','1994-09-01','Sierra Leone'),
+	 (100056,'Benedict Dennis','1994-11-05','Luxembourg'),
+	 (100057,'Chadwick Walker','1996-04-19','Cape Verde'),
+	 (100058,'Victor Williamson','1997-02-11','Senegal'),
+	 (100059,'Emerald Lynch','1997-02-23','Saint Helena, Ascension and Tristan da Cunha');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100060,'Theodore Ryan','1995-11-19','Isle of Man'),
+	 (100061,'Beatrice Rowland','1993-05-24','Greece'),
+	 (100062,'Stephen Hewitt','1993-09-12','Yemen'),
+	 (100063,'Yvonne Berg','1997-08-25','Macedonia'),
+	 (100064,'Lucius Schroeder','1997-03-02','Bermuda'),
+	 (100065,'Unity Slater','1997-02-24','Paraguay'),
+	 (100066,'Mariam Walsh','1998-11-07','Iraq'),
+	 (100067,'Tamara Burnett','2000-09-19','Anguilla'),
+	 (100068,'Cathleen Holcomb','1993-09-29','Germany'),
+	 (100069,'Clio Day','1996-07-02','Moldova');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100070,'Gannon Perkins','1994-07-08','Malta'),
+	 (100071,'MacKenzie Mcguire','1992-04-25','Grenada'),
+	 (100072,'Caldwell Davenport','1999-09-26','Cook Islands'),
+	 (100073,'Belle Hamilton','1996-05-26','South Sudan'),
+	 (100074,'Nicole Haynes','1997-06-21','New Caledonia'),
+	 (100075,'Amethyst Calhoun','1997-07-14','Mexico'),
+	 (100076,'TaShya Jennings','1999-05-18','Falkland Islands'),
+	 (100077,'Daria Whitehead','1995-04-26','South Sudan'),
+	 (100078,'Colette Lopez','1993-06-24','Lesotho'),
+	 (100079,'Wing Fields','1999-11-22','Serbia');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100080,'Penelope Stevenson','1997-06-13','Pakistan'),
+	 (100081,'Abel Thomas','1992-03-13','Korea, North'),
+	 (100082,'Samson Jennings','1998-04-11','Samoa'),
+	 (100083,'Pearl Young','1994-12-04','Kuwait'),
+	 (100084,'Catherine Nguyen','1999-08-20','Jamaica'),
+	 (100085,'Alexis Warren','1997-08-13','Rwanda'),
+	 (100086,'Jordan Rivera','1993-02-10','Guyana'),
+	 (100087,'Philip Riley','1997-02-17','Saudi Arabia'),
+	 (100088,'Raja Higgins','1999-12-12','Cambodia'),
+	 (100089,'Aurora Richards','2000-03-02','Honduras');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100090,'Boris Turner','1994-05-27','South Georgia and The South Sandwich Islands'),
+	 (100091,'Ronan Ross','1998-10-29','Saint Vincent and The Grenadines'),
+	 (100092,'Drew Baird','1993-05-24','Liberia'),
+	 (100093,'Elliott Delaney','2000-12-20','Saint Martin'),
+	 (100094,'Cadman Trevino','1999-09-17','Bolivia'),
+	 (100095,'Echo Rowland','1999-05-08','Niger'),
+	 (100096,'Noelle Hess','1993-01-06','Falkland Islands'),
+	 (100097,'Maya Prince','1993-09-28','Finland'),
+	 (100098,'Keiko Cash','1997-06-25','Benin'),
+	 (100099,'Serina Walter','1999-04-29','South Africa');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100100,'Taylor Roy','1994-01-13','New Caledonia'),
+	 (100101,'Maryam Oliver','1998-07-30','British Indian Ocean Territory'),
+	 (100102,'Karina Wright','1992-10-22','Montserrat'),
+	 (100103,'Tucker Roy','2000-04-02','Guernsey'),
+	 (100104,'Fleur Wong','1996-06-22','Kenya'),
+	 (100105,'Frances Hamilton','1996-08-20','Greenland'),
+	 (100106,'Helen Donaldson','1992-06-21','Grenada'),
+	 (100107,'Leroy Mcintosh','1995-02-02','British Indian Ocean Territory'),
+	 (100108,'Merritt Lynn','1995-03-12','Niue'),
+	 (100109,'Bryar Albert','1994-01-20','Papua New Guinea');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100110,'Hall Nixon','1998-06-24','Morocco'),
+	 (100111,'August Head','1999-05-17','Saint Kitts and Nevis'),
+	 (100112,'Honorato Wilkerson','1992-11-26','Mauritius'),
+	 (100113,'Ralph Olsen','1995-03-23','Mongolia'),
+	 (100114,'Adria Holmes','1996-03-08','Tonga'),
+	 (100115,'Eleanor Galloway','1994-03-14','India'),
+	 (100116,'Kimberley Hughes','1994-11-19','Greece'),
+	 (100117,'Iola Weeks','1996-09-22','Solomon Islands'),
+	 (100118,'Palmer Baird','1993-11-29','Virgin Islands, British'),
+	 (100119,'Emerson Benson','1994-08-19','American Samoa');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100120,'Lana Gray','1997-10-23','Czech Republic'),
+	 (100121,'Michelle Roth','1997-08-03','Colombia'),
+	 (100122,'Sonya Irwin','1994-10-25','Egypt'),
+	 (100123,'Jesse Waters','1997-04-22','Northern Mariana Islands'),
+	 (100124,'Vernon Ware','2000-07-11','Botswana'),
+	 (100125,'Brock Craig','1996-03-04','Guyana'),
+	 (100126,'Louis Schmidt','1997-07-23','Greenland'),
+	 (100127,'Kylan Skinner','1999-05-05','Trinidad and Tobago'),
+	 (100128,'Kim Orr','1996-08-24','Norfolk Island'),
+	 (100129,'Jacob Clements','1996-05-01','Aruba');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100130,'Mara Whitley','1992-07-12','Cyprus'),
+	 (100131,'Indira Rios','1999-12-23','Mauritius'),
+	 (100132,'Jaden Buckner','1996-06-21','Kyrgyzstan'),
+	 (100133,'Jasmine Edwards','1995-01-03','Korea, North'),
+	 (100134,'Davis Dale','1996-02-27','Svalbard and Jan Mayen Islands'),
+	 (100135,'Bevis Shepherd','2001-01-01','Haiti'),
+	 (100136,'Ali Carrillo','1996-05-19','Reunion'),
+	 (100137,'Coby Thompson','1992-02-21','Djibouti'),
+	 (100138,'Shannon Barnett','1998-10-10','Mali'),
+	 (100139,'Paula Pollard','2000-11-09','Djibouti');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100140,'Victoria Mcguire','1998-07-09','United Kingdom (Great Britain)'),
+	 (100141,'Aspen Livingston','2000-07-06','Laos'),
+	 (100142,'Axel Lyons','1992-08-22','Sri Lanka'),
+	 (100143,'Caryn Bullock','1999-02-08','Estonia'),
+	 (100144,'Dalton Fischer','1996-02-19','Fiji'),
+	 (100145,'Linda Irwin','1995-05-22','Australia'),
+	 (100146,'Jakeem Drake','1995-05-16','Bouvet Island'),
+	 (100147,'Brynn Fulton','1996-02-23','Armenia'),
+	 (100148,'Sawyer Lewis','1999-08-12','Norway'),
+	 (100149,'Lydia Kirkland','1999-08-30','Turkey');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100150,'Keelie Freeman','1998-08-24','Haiti'),
+	 (100151,'Alice Reynolds','1995-01-04','Nepal'),
+	 (100152,'Yuli Lucas','1995-09-17','South Africa'),
+	 (100153,'Leila Carpenter','1996-05-09','Chad'),
+	 (100154,'Sheila Fuentes','1997-11-14','Jordan'),
+	 (100155,'Ashely Willis','1999-02-25','Tokelau'),
+	 (100156,'Joy Shepard','1999-07-11','Hong Kong'),
+	 (100157,'Risa Conley','1994-10-21','Malaysia'),
+	 (100158,'Fleur Dodson','1993-09-08','Palestine, State of'),
+	 (100159,'Cadman Blackburn','1997-09-23','French Guiana');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100160,'Marcia Burke','1993-12-27','Venezuela'),
+	 (100161,'Hop Aguirre','1998-10-07','Åland Islands'),
+	 (100162,'Keane Ramsey','1997-02-08','Liechtenstein'),
+	 (100163,'Quamar Daniel','1999-11-30','Iran'),
+	 (100164,'Clare Carrillo','1997-05-16','Luxembourg'),
+	 (100165,'Miranda Mccormick','1996-10-29','Mayotte'),
+	 (100166,'Teegan Colon','1999-06-19','Poland'),
+	 (100167,'Tanya Harrell','2000-02-22','Andorra'),
+	 (100168,'Marah Talley','1998-08-05','French Guiana'),
+	 (100169,'Dorian Neal','1999-03-05','Swaziland');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100170,'Melodie Webb','1994-09-01','Isle of Man'),
+	 (100171,'Nolan Pope','1994-06-23','South Georgia and The South Sandwich Islands'),
+	 (100172,'Nash Wolf','1998-07-09','Korea, South'),
+	 (100173,'Haviva Bowman','2000-08-17','Guatemala'),
+	 (100174,'Craig Rose','1993-07-21','Timor-Leste'),
+	 (100175,'Ivana Irwin','2000-02-28','Timor-Leste'),
+	 (100176,'Malachi Banks','2000-02-11','Guyana'),
+	 (100177,'Lance Hill','1992-02-27','Tonga'),
+	 (100178,'Daquan Beard','1994-08-11','New Caledonia'),
+	 (100179,'Blake Fernandez','1992-03-30','Puerto Rico');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100180,'Wyatt Coleman','1993-09-30','Czech Republic'),
+	 (100181,'Minerva Cameron','1999-07-16','France'),
+	 (100182,'Orson Mccarty','2000-01-12','Mongolia'),
+	 (100183,'Jada Jacobs','1997-01-22','Russian Federation'),
+	 (100184,'Charles Andrews','1993-09-14','United States Minor Outlying Islands'),
+	 (100185,'Odette Mayer','1994-07-11','Holy See (Vatican City State)'),
+	 (100186,'Naida Duffy','1995-06-09','France'),
+	 (100187,'Zenaida Branch','1992-05-07','Monaco'),
+	 (100188,'Kirsten Trujillo','1999-10-15','Belarus'),
+	 (100189,'Zoe Horne','1998-09-23','Kenya');
+INSERT INTO proyecto.patinadores (codigo_patinadores,Nombre,Fecha_nac,Pais) VALUES
+	 (100190,'Honorato Savage','2000-07-30','Venezuela'),
+	 (100191,'Neve Mosley','1994-08-02','Guadeloupe'),
+	 (100192,'Xavier Glass','1995-04-28','Haiti'),
+	 (100193,'Mercedes Petty','1994-12-04','Niue'),
+	 (100194,'Giselle Witt','1997-07-13','Paraguay'),
+	 (100195,'Ronan Santos','1992-03-22','China'),
+	 (100196,'Stuart James','1992-06-16','Tanzania'),
+	 (100197,'Courtney Rich','1993-03-11','Guatemala'),
+	 (100198,'Gary Herman','1999-07-26','Martinique'),
+	 (100199,'Nasim Mcintosh','1997-12-26','Mali');
+   
+   
+   INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (670,7393,0,438,1),
+	 (859,7393,1,890,5),
+	 (996,7393,1,787,1),
+	 (1217,7393,1,619,1),
+	 (1234,7393,3,676,5),
+	 (1937,7393,2,443,3),
+	 (3359,7393,3,605,2),
+	 (4472,7393,0,537,2),
+	 (4898,7393,3,836,5),
+	 (5678,7393,2,446,4);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (7123,7393,1,658,1),
+	 (10118,7393,0,642,5),
+	 (12876,7393,1,832,1),
+	 (12877,7393,1,515,5),
+	 (13362,7393,3,855,2),
+	 (14192,7393,2,636,5),
+	 (14829,7393,2,565,2),
+	 (15231,7393,3,624,2),
+	 (16111,7393,1,462,2),
+	 (16111,7393,1,553,2);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (20882,7393,2,882,1),
+	 (13362,7393,3,855,2),
+	 (23628,7393,2,539,5),
+	 (23628,7393,2,539,5),
+	 (24319,7393,1,500,5),
+	 (24550,7393,2,632,2),
+	 (24893,7393,3,581,5),
+	 (26075,7393,2,531,1),
+	 (26235,7393,1,762,2),
+	 (26885,7393,3,495,5);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (27136,7393,3,627,2),
+	 (28429,7393,3,678,2),
+	 (30028,7393,1,471,2),
+	 (30194,7393,3,554,2),
+	 (30347,7393,3,522,4),
+	 (30580,7393,1,766,1),
+	 (30593,7393,2,818,5),
+	 (30974,7393,0,510,1),
+	 (31889,8118,1,786,1),
+	 (33071,8118,2,789,2);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (33640,8110,3,587,3),
+	 (33977,8110,1,486,4),
+	 (34252,8110,2,478,5),
+	 (34963,8110,3,846,1),
+	 (35951,8110,0,852,2),
+	 (36056,8110,0,452,3),
+	 (36142,8110,0,987,4),
+	 (36201,8110,2,975,1),
+	 (36355,8110,3,543,2),
+	 (36558,8110,1,987,1);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (37321,8039,2,465,2),
+	 (37352,8039,1,963,2),
+	 (37423,8039,3,582,3),
+	 (39336,8039,0,471,3),
+	 (40108,8039,0,753,4),
+	 (42605,8039,0,789,3),
+	 (42668,8039,0,968,3),
+	 (43011,8039,1,897,4),
+	 (43625,8039,1,689,5),
+	 (44211,8039,0,857,5);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (44568,8031,2,741,4),
+	 (44723,8031,1,543,3),
+	 (45026,8031,2,786,2),
+	 (45588,8031,0,543,4),
+	 (46067,8031,2,786,5),
+	 (46344,8031,1,786,3),
+	 (46837,8031,0,543,4),
+	 (46906,8031,2,789,2),
+	 (47096,8031,1,543,3),
+	 (47231,8031,0,968,4);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (47541,7987,3,789,2),
+	 (47547,7987,2,968,3),
+	 (49031,7987,1,852,4),
+	 (49203,7987,2,789,5),
+	 (49829,7987,0,852,1),
+	 (49925,7987,3,789,2),
+	 (52422,7987,2,968,1),
+	 (52585,7987,2,968,5),
+	 (53083,7987,2,786,4),
+	 (53327,7987,3,852,5);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (53338,7913,2,789,4),
+	 (53722,7913,0,968,3),
+	 (53820,7913,2,543,2),
+	 (53863,7913,0,789,5),
+	 (670,7913,0,968,4),
+	 (859,7913,0,786,4),
+	 (996,7913,3,968,3),
+	 (1217,7913,2,543,3),
+	 (1234,7913,2,789,3),
+	 (1937,7913,0,968,4);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (3359,7908,3,789,3),
+	 (4472,7908,2,968,2),
+	 (4898,7908,0,789,1),
+	 (5678,7908,3,852,1),
+	 (7123,7908,2,786,1),
+	 (10118,7908,2,852,4),
+	 (12876,7908,1,852,3),
+	 (12877,7908,1,786,2),
+	 (13362,7908,2,789,1),
+	 (30974,7908,0,786,4);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (30593,7810,1,968,3),
+	 (30580,7810,1,852,1),
+	 (30347,7810,0,789,3),
+	 (30194,7810,3,543,2),
+	 (30028,7810,3,852,5),
+	 (28429,7810,1,968,4),
+	 (27136,7810,0,789,4),
+	 (26885,7810,3,452,5),
+	 (26235,7810,2,968,1),
+	 (26075,7810,3,452,2);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (24893,7750,2,543,3),
+	 (24550,7750,3,452,2),
+	 (24319,7750,3,543,3),
+	 (23628,7750,0,452,1),
+	 (75703,7750,2,968,4),
+	 (76086,7750,3,975,3),
+	 (20882,7750,1,968,5),
+	 (76571,7750,2,852,2),
+	 (16111,7750,1,452,1),
+	 (15231,7750,2,786,5);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (14829,7639,2,968,1),
+	 (14192,7639,1,852,2),
+	 (81429,7639,2,975,4),
+	 (81556,7639,0,852,3),
+	 (83632,7639,3,968,3),
+	 (83968,7639,1,975,2),
+	 (84412,7639,0,789,4),
+	 (85709,7639,0,975,4),
+	 (86080,7639,1,852,1),
+	 (86781,7639,2,852,3);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (87826,7592,2,975,5),
+	 (88803,7592,1,852,2),
+	 (89261,7592,3,543,1),
+	 (89977,7592,0,975,5),
+	 (90538,7592,1,786,2),
+	 (90998,7592,2,852,1),
+	 (91212,7592,0,452,2),
+	 (92429,7592,1,786,3),
+	 (93096,7592,2,789,2),
+	 (93731,7592,0,543,1);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (96340,7544,2,786,3),
+	 (96419,7544,2,975,3),
+	 (96700,7544,1,543,2),
+	 (96813,7544,2,452,3),
+	 (97083,7544,2,786,5),
+	 (97604,7544,2,789,5),
+	 (97879,7544,0,975,3),
+	 (98283,7544,1,786,4),
+	 (98390,7544,1,789,2),
+	 (36011,7544,0,975,1);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100000,7639,2,933,4),
+	 (100001,7639,2,558,4),
+	 (100002,7639,2,637,2),
+	 (100003,7639,2,609,1),
+	 (100004,7639,2,499,4),
+	 (100005,7639,1,559,5),
+	 (100006,7639,1,707,5),
+	 (100007,7639,2,562,2),
+	 (100008,7639,1,682,1),
+	 (100009,7639,2,871,2);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100010,7639,3,705,3),
+	 (100011,7639,2,873,3),
+	 (100012,7639,1,835,5),
+	 (100013,7639,1,466,1),
+	 (100014,7639,2,695,3),
+	 (100015,7639,2,559,5),
+	 (100016,7639,3,903,3),
+	 (100017,7639,3,856,1),
+	 (100018,7639,2,740,1),
+	 (100019,7639,3,821,3);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100020,7639,1,642,2),
+	 (100021,7639,1,541,2),
+	 (100022,7639,2,533,4),
+	 (100023,7639,2,648,5),
+	 (100024,7639,1,925,5),
+	 (100025,7639,1,895,3),
+	 (100026,7639,2,453,3),
+	 (100027,7639,2,698,2),
+	 (100028,7639,2,856,1),
+	 (100029,7639,2,586,2);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100030,7639,3,665,4),
+	 (100031,7639,2,556,3),
+	 (100032,7639,1,541,5),
+	 (100033,7639,1,924,3),
+	 (100034,7639,1,959,5),
+	 (100035,7639,2,713,1),
+	 (100036,7639,3,567,2),
+	 (100037,7639,2,693,3),
+	 (100038,7639,2,781,5),
+	 (100039,7639,2,929,1);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100040,7639,3,900,3),
+	 (100041,7639,3,932,1),
+	 (100042,7639,2,499,1),
+	 (100043,7639,1,951,5),
+	 (100044,7639,3,806,2),
+	 (100045,7639,3,589,2),
+	 (100046,7639,1,599,5),
+	 (100047,7639,3,783,1),
+	 (100048,7639,3,803,3),
+	 (100049,7639,2,726,5);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100050,7639,3,860,3),
+	 (100051,7639,2,566,3),
+	 (100052,7639,2,582,3),
+	 (100053,7639,1,529,3),
+	 (100054,7639,3,850,5),
+	 (100055,7639,3,566,4),
+	 (100056,7639,3,726,2),
+	 (100057,7639,3,767,5),
+	 (100058,7639,1,839,3),
+	 (100059,7639,2,534,4);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100060,7639,2,781,5),
+	 (100061,7639,2,463,3),
+	 (100062,7639,1,782,1),
+	 (100063,7639,2,633,5),
+	 (100064,7639,1,631,3),
+	 (100065,7639,1,619,3),
+	 (100066,7639,1,808,4),
+	 (100067,7639,2,723,2),
+	 (100068,7639,3,638,5),
+	 (100069,7639,3,725,1);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100070,7639,1,949,1),
+	 (100071,7639,2,733,4),
+	 (100072,7639,3,672,1),
+	 (100073,7639,1,523,3),
+	 (100074,7639,1,804,3),
+	 (100075,7639,2,715,5),
+	 (100076,7639,2,806,3),
+	 (100077,7639,1,701,5),
+	 (100078,7639,3,824,1),
+	 (100079,7639,3,555,5);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100080,7639,2,469,2),
+	 (100081,7639,1,604,5),
+	 (100082,7639,2,917,3),
+	 (100083,7639,1,712,2),
+	 (100084,7639,1,890,4),
+	 (100085,7639,2,590,2),
+	 (100086,7639,1,527,5),
+	 (100087,7639,3,723,3),
+	 (100088,7639,2,629,1),
+	 (100089,7639,1,731,2);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100090,7639,1,889,3),
+	 (100091,7639,1,743,3),
+	 (100092,7639,3,455,2),
+	 (100093,7639,3,768,5),
+	 (100094,7639,2,748,2),
+	 (100095,7639,1,798,4),
+	 (100096,7639,3,952,1),
+	 (100097,7639,2,920,3),
+	 (100098,7639,1,839,4),
+	 (100099,7639,1,577,3);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100100,7544,3,807,3),
+	 (100101,7544,2,701,3),
+	 (100102,7544,3,750,5),
+	 (100103,7544,2,858,3),
+	 (100104,7544,1,508,3),
+	 (100105,7544,1,487,2),
+	 (100106,7544,2,789,2),
+	 (100107,7544,1,524,2),
+	 (100108,7544,1,829,3),
+	 (100109,7544,1,620,4);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100110,7544,2,599,2),
+	 (100111,7544,1,724,1),
+	 (100112,7544,2,530,4),
+	 (100113,7544,2,933,5),
+	 (100114,7544,1,690,3),
+	 (100115,7544,2,515,4),
+	 (100116,7544,3,454,2),
+	 (100117,7544,1,808,4),
+	 (100118,7544,1,839,4),
+	 (100119,7544,2,870,3);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100120,7544,2,822,2),
+	 (100121,7544,3,549,5),
+	 (100122,7544,3,652,1),
+	 (100123,7544,2,916,4),
+	 (100124,7544,1,617,2),
+	 (100125,7544,3,503,5),
+	 (100126,7544,2,459,4),
+	 (100127,7544,2,815,3),
+	 (100128,7544,3,618,5),
+	 (100129,7544,1,934,5);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100130,7544,1,548,4),
+	 (100131,7544,3,949,5),
+	 (100132,7544,2,570,2),
+	 (100133,7544,1,456,2),
+	 (100134,7544,1,742,1),
+	 (100135,7544,1,750,3),
+	 (100136,7544,1,757,5),
+	 (100137,7544,1,669,5),
+	 (100138,7544,1,868,2),
+	 (100139,7544,1,673,5);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100140,7544,2,860,2),
+	 (100141,7544,1,484,2),
+	 (100142,7544,1,731,5),
+	 (100143,7544,2,886,4),
+	 (100144,7544,1,715,3),
+	 (100145,7544,2,854,1),
+	 (100146,7544,2,803,2),
+	 (100147,7544,3,725,2),
+	 (100148,7544,3,589,2),
+	 (100149,7544,1,606,3);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100150,7544,2,885,5),
+	 (100151,7544,2,487,4),
+	 (100152,7544,1,602,3),
+	 (100153,7544,2,926,3),
+	 (100154,7544,1,459,5),
+	 (100155,7544,1,875,1),
+	 (100156,7544,3,799,2),
+	 (100157,7544,2,854,5),
+	 (100158,7544,1,769,4),
+	 (100159,7544,3,554,5);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100160,7544,3,848,5),
+	 (100161,7544,2,770,3),
+	 (100162,7544,1,968,1),
+	 (100163,7544,3,639,4),
+	 (100164,7544,2,619,2),
+	 (100165,7544,2,917,1),
+	 (100166,7544,3,491,3),
+	 (100167,7544,1,683,5),
+	 (100168,7544,2,943,4),
+	 (100169,7544,2,469,2);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100170,7544,3,953,1),
+	 (100171,7544,1,625,4),
+	 (100172,7544,3,856,4),
+	 (100173,7544,2,761,5),
+	 (100174,7544,3,770,3),
+	 (100175,7544,2,521,5),
+	 (100176,7544,2,526,3),
+	 (100177,7544,2,760,3),
+	 (100178,7544,2,819,2),
+	 (100179,7544,2,617,2);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100180,7544,1,513,2),
+	 (100181,7544,1,892,1),
+	 (100182,7544,1,903,2),
+	 (100183,7544,1,490,3),
+	 (100184,7544,1,943,1),
+	 (100185,7544,2,816,4),
+	 (100186,7544,1,573,3),
+	 (100187,7544,3,475,4),
+	 (100188,7544,1,467,5),
+	 (100189,7544,2,512,5);
+INSERT INTO proyecto.participantes (codigo_patinadores,TORNEO_codigo_torneo,penalizaciones,num_puntos,mejor_truco) VALUES
+	 (100190,7544,3,786,5),
+	 (100191,7544,2,452,5),
+	 (100192,7544,3,889,3),
+	 (100193,7544,3,684,4),
+	 (100194,7544,1,736,1),
+	 (100195,7544,1,582,4),
+	 (100196,7544,3,494,4),
+	 (100197,7544,3,469,2),
+	 (100198,7544,3,516,3),
+	 (100199,7544,1,574,1);
+   
+   
+   INSERT INTO proyecto.marcas (Nombre_marca,Patinadores_patrocinados) VALUES
+	 ('Adiddas',50),
+	 ('Champion',21),
+	 ('Kappa',14),
+	 ('Nike',65);
+   
+   
+   INSERT INTO proyecto.patinadores_has_marcas (codigo_patinadores,Nombre_marca) VALUES
+	 (64595,'Adiddas'),
+	 (68382,'Adiddas'),
+	 (69013,'Adiddas'),
+	 (69754,'Adiddas'),
+	 (70344,'Adiddas'),
+	 (71530,'Adiddas'),
+	 (71654,'Adiddas'),
+	 (71789,'Adiddas'),
+	 (73251,'Adiddas'),
+	 (73407,'Adiddas');
+INSERT INTO proyecto.patinadores_has_marcas (codigo_patinadores,Nombre_marca) VALUES
+	 (73451,'Champion'),
+	 (73691,'Champion'),
+	 (73914,'Champion'),
+	 (75208,'Champion'),
+	 (75368,'Champion'),
+	 (75703,'Champion'),
+	 (76086,'Champion'),
+	 (76343,'Champion'),
+	 (76571,'Kappa'),
+	 (79274,'Kappa');
+INSERT INTO proyecto.patinadores_has_marcas (codigo_patinadores,Nombre_marca) VALUES
+	 (80701,'Kappa'),
+	 (81012,'Kappa'),
+	 (81222,'Kappa'),
+	 (64353,'Nike'),
+	 (64314,'Nike'),
+	 (63737,'Nike'),
+	 (63139,'Nike'),
+	 (63072,'Nike'),
+	 (62822,'Nike'),
+	 (62543,'Nike');
+INSERT INTO proyecto.patinadores_has_marcas (codigo_patinadores,Nombre_marca) VALUES
+	 (62507,'Nike'),
+	 (62036,'Nike'),
+	 (59312,'Nike'),
+	 (58496,'Nike'),
+	 (57537,'Nike'),
+	 (57268,'Nike'),
+	 (55164,'Nike'),
+	 (53910,'Nike');
+   
+   
+   INSERT INTO proyecto.torneo (codigo_torneo,nombre,fecha) VALUES
+	 (7393,'Audrye Willsmore','2021-01-08'),
+	 (7544,'Derward Stubbington','2021-05-07'),
+	 (7592,'Gabrielle Hurich','2021-07-02'),
+	 (7639,'Rollo Searl','2021-03-07'),
+	 (7750,'Beltran Pinney','2021-08-02'),
+	 (7810,'Florance Ibbitson','2021-05-03'),
+	 (7908,'Odie Filochov','2021-02-01'),
+	 (7913,'Mayor Scully','2021-11-04'),
+	 (7987,'Munmro Boulding','2021-12-01'),
+	 (8031,'Ellynn Richard','2021-12-01');
+INSERT INTO proyecto.torneo (codigo_torneo,nombre,fecha) VALUES
+	 (8039,'Kynthia Lutwyche','2021-10-04'),
+	 (8110,'Nanny Stanbro','2021-02-10'),
+	 (8118,'Maximilianus Larmor','2021-02-01'),
+	 (8160,'Ario Beharrell','2021-06-01'),
+	 (8203,'Beck Whibley','2021-05-09');
+   
+   
+   INSERT INTO proyecto.estadio (nombre,lugar) VALUES
+	 ('Ario Beharrell','Madagascar'),
+	 ('Audrye Willsmore','Canada'),
+	 ('Beck Whibley','Poland'),
+	 ('Beltran Pinney','Bolivia'),
+	 ('Derward Stubbington','Poland'),
+	 ('Ellynn Richard','Philippines'),
+	 ('Florance Ibbitson','Uganda'),
+	 ('Gabrielle Hurich','Brazil'),
+	 ('Kynthia Lutwyche','Azerbaijan'),
+	 ('Maximilianus Larmor','China');
+INSERT INTO proyecto.estadio (nombre,lugar) VALUES
+	 ('Mayor Scully','Philippines'),
+	 ('Munmro Boulding','Mexico'),
+	 ('Nanny Stanbro','Russia'),
+	 ('Odie Filochov','Indonesia'),
+	 ('Rollo Searl','Indonesia');
+
+
+
+
+
